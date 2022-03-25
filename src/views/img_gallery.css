@@ -1,0 +1,20 @@
+.img-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.img-item {
+    width: 260px;
+    margin: 12px 36px 0 0;
+    overflow: hidden;
+}
+
+.img-header {
+    padding-top: 8px;
+    padding-left: 4px;
+    
+}
+
+.img {
+    width: 100%;
+    border-top: 1px solid #eee;
+}
