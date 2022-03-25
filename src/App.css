@@ -1,6 +1,9 @@
 .App {
   /* text-align: center; */
 }
+.main {
+  margin-top: 16px;
+}
 
 .App-logo {
   height: 40vmin;

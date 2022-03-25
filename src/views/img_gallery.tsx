@@ -1,8 +1,13 @@
 import {Card, Button} from 'react-bootstrap';
+import {
+  useEthers,
+  // useCall,
+} from '@usedapp/core'
 
 import './img_gallery.css';
 
 const ImgGallery = () => {
+  const {account} = useEthers()
   const imgs = {
     meta: null,
     list: [
@@ -36,7 +41,7 @@ const ImgGallery = () => {
                   {img.name}
                 </Card.Title>
                 <Card.Img src={process.env.PUBLIC_URL + `/assets/${img.name}.jpg`} className='img'></Card.Img>
-                <Button variant="primary" onClick={() => mint(img.name)}>mint</Button>
+                <Button variant="primary" onClick={() => mint(img.name)} disabled={!account}>mint</Button>
               </Card >
             )
           })

@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'font-15070';
+    font-style: normal;
+    font-weight: normal;
+    src: url('https://dl.fontget.com/f/e/feeling-lovely/woff_src/Feeling Lovely.woff?token=TS2KUJK-RjpwPZQ8yyc4Sw&expires=1648299026') format('woff');
+}
+
+.logo {
+    font-family: 'font-15070';
+    font-weight: 600;
+    font-size: x-large!important ;
+}

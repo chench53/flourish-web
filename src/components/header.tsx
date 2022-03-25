@@ -1,4 +1,6 @@
-import {Navbar, Button, DropdownButton, Dropdown} from 'react-bootstrap';
+import './header.css'
+
+import { Navbar, Button, DropdownButton, Dropdown, Container } from 'react-bootstrap';
 import {
   useEthers,
 } from '@usedapp/core'
@@ -6,22 +8,25 @@ import {
 export const Header = () => {
   const { activateBrowserWallet, account, deactivate } = useEthers()
   return (
-    <Navbar>
-      <Navbar.Brand href="#home">Flourish</Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-
-          {account ? (
-            <DropdownButton title={`${account.slice(0, 5)}...${account.slice(38)}`} variant='outline-primary'>
-              <Dropdown.Item eventKey="1" onClick={deactivate}>logout</Dropdown.Item>
-            </DropdownButton> 
-          ):
-            <Button onClick={activateBrowserWallet} > connect wallect </Button>
-          }
-
-        </Navbar.Text>
-      </Navbar.Collapse>
+    <Navbar bg="light" variant="light">
+      <Container fluid={true}>
+        <Navbar.Brand href="#" className="logo">
+          {/* <img src={process.env.PUBLIC_URL + '/logo.png'}></img> */}
+          Flourish
+        </Navbar.Brand>
+        {/* <Navbar.Toggle /> */}
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+            {account ? (
+              <DropdownButton title={`${account.slice(0, 5)}...${account.slice(38)}`} variant='outline-primary' align={{ lg: 'end' }}>
+                <Dropdown.Item eventKey="1" onClick={deactivate}>logout</Dropdown.Item>
+              </DropdownButton>
+            ) :
+              <Button onClick={activateBrowserWallet} > connect wallect </Button>
+            }
+          </Navbar.Text>
+        </Navbar.Collapse>
+      </Container>
     </Navbar>
   )
 }
