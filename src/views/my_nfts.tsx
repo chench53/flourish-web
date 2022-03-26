@@ -5,35 +5,35 @@ import './my_nfts.css';
 import {Nft, NftMetadata, FetchMetadata} from '../eth/index';
 import { useState, useEffect } from 'react';
 ////////////////////////////////////////////////////
-// import { Contract } from '@ethersproject/contracts'
+import { Contract } from '@ethersproject/contracts'
 
-// import { useCall, useEthers, useTokenBalance, useEtherBalance } from '@usedapp/core'
+import {useEthers, useCall, useTokenBalance, useEtherBalance } from '@usedapp/core'
 // import { resolve } from 'path'
 // // import Erc721Abi from '../chain-info/contracts/dependencies/OpenZeppelin/openzeppelin-contracts@4.3.2/IERC721.json';
 
 // // const Erc721Interface = new utils.Interface(Erc721Abi)
-// const Erc721Interface = [
-//   {
-//     "inputs": [
-//       {
-//         "internalType": "uint256",
-//         "name": "tokenId",
-//         "type": "uint256"
-//       }
-//     ],
-//     "name": "tokenURI",
-//     "outputs": [
-//       {
-//         "internalType": "string",
-//         "name": "",
-//         "type": "string"
-//       }
-//     ],
-//     "stateMutability": "view",
-//     "type": "function"
-//   }
-// ]
-// const contract = new Contract('0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f', Erc721Interface)
+const Erc721Interface = [
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "tokenURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
+const contract = new Contract('0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f', Erc721Interface)
 
 // export interface NftMetadata {
 //   name: String,
@@ -69,32 +69,70 @@ import { useState, useEffect } from 'react';
 //   }
 // }
 
+// async function HandlerFetchMetadata(nft: Nft)  {
+//     const { value, error } = useCall({ contract, method: 'tokenURI', args: [nft.tokenId] }) ?? {}
+//     let tokenId = nft.tokenId;
+//     console.log(`FetcTokenURI tokenId start: ${tokenId}`)
+//     console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
+//     if (error) {
+//       console.error(error)
+//     }
+//     if (value) {
+//       const tokenUri = value[0]
+//       if (tokenUri && tokenUri.startsWith("http")) {
+//         console.log(`FetchMetadata tokenId start: ${tokenId}`)
+//         const response = await fetch(tokenUri)
+//         console.log(`FetchMetadata tokenId done: ${tokenId}`)
+//         if (response.ok) {
+//           // console.log(response)
+//           const res = await response.json()
+//           console.log(res)
+//           return res
+//         }
+//       }
+//     }
+//   }
+
 function NftItem(nft: Nft, index: Number) {
 
     const [metadata, setMetadata] = useState({image: ""});
-    // setMetadata(metadata => {return metadata})
+    const {account, chainId} = useEthers()
+    const { value, error } = useCall({ contract, method: 'tokenURI', args: [nft.tokenId] }) ?? {}
 
-    // useEffect(() => {
-      console.log('useEffect')
-      FetchMetadata(nft.tokenId).then(metadata => {
-        if (metadata) {
-            console.log(metadata)
-          // nft.metadata = metadata
-          // setMetadata(metadata)
+    const handlerFetchMetadata = async () => {
+      let tokenId = nft.tokenId;
+      console.log(`FetcTokenURI tokenId start: ${tokenId}`)
+      console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
+      if (error) {
+        console.error(error)
+      }
+      if (value) {
+        const tokenUri = value[0]
+        if (tokenUri && tokenUri.startsWith("http")) {
+          console.log(`FetchMetadata tokenId start: ${tokenId}`)
+          const response = await fetch(tokenUri)
+          console.log(`FetchMetadata tokenId done: ${tokenId}`)
+          if (response.ok) {
+            // console.log(response)
+            const res = await response.json()
+            console.log(res)
+            return res
+          }
         }
-      });
-      // fetch("allowances")
-      // .then(data => {
-      //   return data.json();
-      // })
-      // .then(data => {
-      //   setMetadata(data);
-      // })
-      // .catch(err => {
-      //   console.log(123123);
-      // });
+      }
+    }
 
-    // }, [])
+    useEffect(() => {
+      console.log('useEffect '+ account)
+      handlerFetchMetadata().then((metadata: NftMetadata) => {
+          if (metadata) {
+                console.log(metadata)
+          // nft.metadata = metadata
+          setMetadata(metadata)
+        }
+
+      })
+    }, [account])
 
   return (
     <Card key={nft.tokenId.toString()} className='nft-item'>
