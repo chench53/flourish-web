@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -20,11 +20,11 @@ const config: Config = {
 }
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <DAppProvider config={config}>
       <App />
-    </DAppProvider>
-  </React.StrictMode>,
+    </DAppProvider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 

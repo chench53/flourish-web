@@ -3,8 +3,8 @@ import ThemeProvider from 'react-bootstrap/ThemeProvider'
 import Container from 'react-bootstrap/Container'
 import { constants } from 'ethers';
 
-import MyNfts from './my_nfts/my_nfts';
 import { Header } from './components/header';
+import MyNfts from './views/my_nfts';
 import ImgGallery from './views/img_gallery';
 import {Nft} from './eth/index';
 // import ethApi from './eth_api/eth_api';
@@ -20,35 +20,36 @@ import {
 // import logo from './logo.svg';
 import './App.css';
 
+// Add this in node_modules/react-dom/index.js
+const  a  = require('react');
+
+// Add this in your component file
+require('react-dom');
+const b = require('react');
+console.log(a === b);
+
+// const c = require('@usedapp/core/node_modules/r')
+
 
 function App() {
-  // const [account, setAccount] = useState('');
-  // const ethereum = window.ethereum;
-  // const { activateBrowserWallet, account, deactivate } = useEthers()
-  // python web3.Web3.keccak(text='ownerOf(uint256)').substr(0, 8)
-  // const methodSign = {
-    //   'ownerOf': '0x6352211e',
-    //   'balanceOf': '0x70a08231'
-    // }
-    // console.log('heheh')
   const {account, chainId, error} = useEthers()
-  // const contractAddress = '0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f';
-  const nftAddress = chainId ? networkMapping[chainId]["Simple"][0] : constants.AddressZero
-  console.log(nftAddress)
+  // const nftAddress = chainId ? networkMapping[chainId]["Simple"][0] : constants.AddressZero
+  // console.log(nftAddress)
 
   var nfts: Nft[] = [
     {
       tokenId: 0,
     },
-    {
-      tokenId: 1,
-    }
+    // {
+    //   tokenId: 1,
+    // }
   ]
 
   return (
     <ThemeProvider
-      breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+    breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
     >
+      {console.log('render app')}
       <div className="App">
         <Header></Header>
         <Container className='main'>

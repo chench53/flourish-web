@@ -1,6 +1,4 @@
-import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-// import {Contract} from '@usedapp/core/node_modules/@ethersproject/contracts'
 
 import { useCall, useEthers, useTokenBalance, useEtherBalance } from '@usedapp/core'
 // import Erc721Abi from '../chain-info/contracts/dependencies/OpenZeppelin/openzeppelin-contracts@4.3.2/IERC721.json';
@@ -29,7 +27,7 @@ const Erc721Interface = [
 ]
 const contract = new Contract('0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f', Erc721Interface)
 
-interface NftMetadata {
+export interface NftMetadata {
   name: String,
   image: string
 }
@@ -40,24 +38,38 @@ export type Nft = {
 }
 
 export async function FetchMetadata(tokenId: Number) {
-  // const { account } = useEthers()
+  
+  console.log(`FetcTokenURI tokenId start: ${tokenId}`)
   const { value, error } = useCall({ contract, method: 'tokenURI', args: [tokenId] }) ?? {}
-  // console.log('useCall')
-  // console.log(value);
-  // if (value) {
-    // if (!tokenUri) throw 'API address not defined'
-    if (value) {
-      const tokenUri = value[0]
-      if (tokenUri && tokenUri.startsWith("http")) {
-        // const r = RequestInfo()
-        const response = await window.fetch(tokenUri)
-        if (response.ok) {
-          console.log(response)
-          const res = await response.json()
-          console.log(res)
-          return res
-        }
+  console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
+  if (error) {
+    console.error(error)
+  }
+  if (value) {
+    const tokenUri = value[0]
+    if (tokenUri && tokenUri.startsWith("http")) {
+      console.log(`FetchMetadata tokenId start: ${tokenId}`)
+      const response = await fetch(tokenUri)
+      console.log(`FetchMetadata tokenId done: ${tokenId}`)
+      if (response.ok) {
+        // console.log(response)
+        const res = await response.json()
+        console.log(res)
+        return res
       }
     }
-  // }
+  }
+  
+  // fetch("allowances")
+  // .then(data => {
+  //   return data.json();
+  // })
+  // .then(data => {
+  //   setMetadata(data);
+  // })
+  // .catch(err => {
+  //   console.log(123123);
+  // });
+  // return await fetch("allowances")
+
 }
