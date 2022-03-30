@@ -8,11 +8,6 @@ import {DAppProvider, Rinkeby, Config} from '@usedapp/core'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-// var Eth = require('web3-eth');
-
-// "Eth.providers.givenProvider" will be set if in an Ethereum supported browser.
-// var eth = new Eth(Eth.givenProvider || 'ws://some.local-or-remote.node:8546');
-
 const config: Config = {
   networks: [
     Rinkeby

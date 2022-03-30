@@ -1,0 +1,1 @@
+export const IPFS_GATEWAY = 'http://ipfs.frontiech.com'

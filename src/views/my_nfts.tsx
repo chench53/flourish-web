@@ -2,7 +2,7 @@ import { Card, Spinner } from 'react-bootstrap';
 
 import './my_nfts.css';
 
-import { Nft, NftMetadata, contract } from '../eth/index';
+import { Nft, NftMetadata, contract, fetchMetadata } from '../modules/eth';
 import { useState, useEffect } from 'react';
 
 import { useCalls,  CallResult} from '@usedapp/core';
@@ -12,31 +12,9 @@ function NftItem(nft: Nft, result: CallResult) {
 
   const [image, setImage] = useState('');
 
-  const handlerFetchMetadata = async () => {
-    const value = result?.value;
-    const error = result?.error
-    let tokenId = nft.tokenId;
-    console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
-    if (error) {
-      console.error(error)
-    }
-    if (value) {
-      const tokenUri = value[0]
-      if (tokenUri && tokenUri.startsWith("http")) {
-        const response = await fetch(tokenUri)
-        if (response.ok) {
-          const res = await response.json()
-          return res
-        } else {
-          console.error(response)
-        }
-      }
-    }
-  }
-
   useEffect(() => {
     if (result?.value) {
-      handlerFetchMetadata().then((data: NftMetadata) => {
+      fetchMetadata(nft, result).then((data: NftMetadata) => {
         if (data) {
           console.log(data)
           setImage(data.image);
@@ -44,7 +22,7 @@ function NftItem(nft: Nft, result: CallResult) {
         }
       })
     }
-  }, [result?.value])
+  }, [result?.value])// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Card key={nft.tokenId.toString()} className='nft-item'>

@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container'
 
 import { Header } from './components/header';
 import {MyNfts, ImgGallery} from './views/index';
-import {Nft} from './eth/index';
+import {Nft} from './modules/eth';
 import './App.css';
 
 import {useEthers } from '@usedapp/core'
@@ -19,6 +19,15 @@ function App() {
     },
     {
       tokenId: 1,
+    },
+    {
+      tokenId: 2,
+    },
+    {
+      tokenId: 3,
+    },
+    {
+      tokenId: 4,
     }
   ]
 

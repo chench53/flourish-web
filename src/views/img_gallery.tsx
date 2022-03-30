@@ -1,16 +1,27 @@
 import {Card, Button} from 'react-bootstrap';
 import {
   useEthers,
-  // useCall,
+  useContractFunction,
 } from '@usedapp/core'
+
+import {IPFS_GATEWAY} from '../modules/const';
+import {contract} from '../modules/eth';
+import imgList from './img_list.json';
 
 import './img_gallery.css';
 
+var imageMapping = {};
+imgList.forEach(img => {imageMapping[img.name] = img})
+
 const ImgOri = (name: string, src: string) => {
   const {account} = useEthers()
+  const { state, send } = useContractFunction(contract, 'createCollectible', {}) 
 
-  const mint = (v: String) => {
-    console.log(v)
+
+  const Mint = (name: string) => {
+    var tokenUri = `${IPFS_GATEWAY}/ipfs/${imageMapping[name].metadata_hash}?filename=${name}.json`
+    send(tokenUri)
+    // send('http://ipfs.frontiech.com/ipfs/QmW6hNdJEgRNNQZ3mbLaxiYbRHYoE9KN9vqUHJJ5wDdnFM?filename=lamp-c.json')
   }
 
   return (
@@ -19,7 +30,7 @@ const ImgOri = (name: string, src: string) => {
         {name}
       </Card.Title>
       <Card.Img src={src} className='img'></Card.Img>
-      <Button variant="primary" onClick={() => mint(name)} disabled={!account}>mint</Button>
+      <Button variant="primary" onClick={() => Mint(name)} disabled={!account}>mint</Button>
     </Card >
   )
 }
@@ -27,20 +38,7 @@ const ImgOri = (name: string, src: string) => {
 const ImgGallery = () => {
   const imgs = {
     meta: null,
-    list: [
-      {
-        name: 'lamp-a',
-        // file:  '/assets/lamp-a.jpg'
-      },
-      {
-        name: 'lamp-b',
-        // file:  '/assets/lamp-b.jpg'
-      },
-      {
-        name: 'lamp-c',
-        // file:  '/assets/lamp-c.jpg'
-      },
-    ]
+    list: imgList
   }
 
 
