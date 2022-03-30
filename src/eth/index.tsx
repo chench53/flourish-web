@@ -1,9 +1,7 @@
 import { Contract } from '@ethersproject/contracts'
 
-import { useCall, useEthers, useTokenBalance, useEtherBalance } from '@usedapp/core'
-// import Erc721Abi from '../chain-info/contracts/dependencies/OpenZeppelin/openzeppelin-contracts@4.3.2/IERC721.json';
+import { useCall } from '@usedapp/core'
 
-// const Erc721Interface = new utils.Interface(Erc721Abi)
 const Erc721Interface = [
   {
     "inputs": [
@@ -25,10 +23,10 @@ const Erc721Interface = [
     "type": "function"
   }
 ]
-const contract = new Contract('0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f', Erc721Interface)
+export const contract = new Contract('0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f', Erc721Interface)
 
 export interface NftMetadata {
-  name: String,
+  name: string,
   image: string
 }
 
@@ -59,17 +57,4 @@ export async function FetchMetadata(tokenId: Number) {
       }
     }
   }
-  
-  // fetch("allowances")
-  // .then(data => {
-  //   return data.json();
-  // })
-  // .then(data => {
-  //   setMetadata(data);
-  // })
-  // .catch(err => {
-  //   console.log(123123);
-  // });
-  // return await fetch("allowances")
-
 }

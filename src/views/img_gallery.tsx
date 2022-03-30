@@ -6,8 +6,25 @@ import {
 
 import './img_gallery.css';
 
-const ImgGallery = () => {
+const ImgOri = (name: string, src: string) => {
   const {account} = useEthers()
+
+  const mint = (v: String) => {
+    console.log(v)
+  }
+
+  return (
+    <Card key={name} className='img-item'>
+      <Card.Title className='img-header'>
+        {name}
+      </Card.Title>
+      <Card.Img src={src} className='img'></Card.Img>
+      <Button variant="primary" onClick={() => mint(name)} disabled={!account}>mint</Button>
+    </Card >
+  )
+}
+
+const ImgGallery = () => {
   const imgs = {
     meta: null,
     list: [
@@ -25,25 +42,15 @@ const ImgGallery = () => {
       },
     ]
   }
-  const mint = (v: String) => {
-    console.log(v)
-  }
+
 
   return (
     <div>
-      <p>choose an image to mint a nft</p>
+      <h4>choose an image to mint a nft</h4>
       <div className="img-list">
         {
           imgs.list.map((img) => {
-            return (
-              <Card key={img.name} className='img-item'>
-                <Card.Title className='img-header'>
-                  {img.name}
-                </Card.Title>
-                <Card.Img src={process.env.PUBLIC_URL + `/assets/${img.name}.jpg`} className='img'></Card.Img>
-                <Button variant="primary" onClick={() => mint(img.name)} disabled={!account}>mint</Button>
-              </Card >
-            )
+            return ImgOri(img.name, process.env.PUBLIC_URL + `/assets/${img.name}.jpg`)
           })
         }
       </div>     

@@ -1,149 +1,59 @@
-import {Card, Button, Spinner} from 'react-bootstrap';
+import { Card, Spinner } from 'react-bootstrap';
 
 import './my_nfts.css';
 
-import {Nft, NftMetadata, FetchMetadata} from '../eth/index';
+import { Nft, NftMetadata, contract } from '../eth/index';
 import { useState, useEffect } from 'react';
-////////////////////////////////////////////////////
-import { Contract } from '@ethersproject/contracts'
 
-import {useEthers, useCall, useTokenBalance, useEtherBalance } from '@usedapp/core'
-// import { resolve } from 'path'
-// // import Erc721Abi from '../chain-info/contracts/dependencies/OpenZeppelin/openzeppelin-contracts@4.3.2/IERC721.json';
+import { useCalls,  CallResult} from '@usedapp/core';
 
-// // const Erc721Interface = new utils.Interface(Erc721Abi)
-const Erc721Interface = [
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  }
-]
-const contract = new Contract('0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f', Erc721Interface)
 
-// export interface NftMetadata {
-//   name: String,
-//   image: string
-// }
+function NftItem(nft: Nft, result: CallResult) {
 
-// export type Nft = {
-//   readonly tokenId: Number,
-//   metadata?: NftMetadata,
-// }
+  const [image, setImage] = useState('');
 
-// export async function FetchMetadata(tokenId: Number) {
-
-//   console.log(`FetcTokenURI tokenId start: ${tokenId}`)
-//   const { value, error } = useCall({ contract, method: 'tokenURI', args: [tokenId] }) ?? {}
-//   console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
-//   if (error) {
-//     console.error(error)
-//   }
-//   if (value) {
-//     const tokenUri = value[0]
-//     if (tokenUri && tokenUri.startsWith("http")) {
-//       console.log(`FetchMetadata tokenId start: ${tokenId}`)
-//       const response = await fetch(tokenUri)
-//       console.log(`FetchMetadata tokenId done: ${tokenId}`)
-//       if (response.ok) {
-//         // console.log(response)
-//         const res = await response.json()
-//         console.log(res)
-//         return res
-//       }
-//     }
-//   }
-// }
-
-// async function HandlerFetchMetadata(nft: Nft)  {
-//     const { value, error } = useCall({ contract, method: 'tokenURI', args: [nft.tokenId] }) ?? {}
-//     let tokenId = nft.tokenId;
-//     console.log(`FetcTokenURI tokenId start: ${tokenId}`)
-//     console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
-//     if (error) {
-//       console.error(error)
-//     }
-//     if (value) {
-//       const tokenUri = value[0]
-//       if (tokenUri && tokenUri.startsWith("http")) {
-//         console.log(`FetchMetadata tokenId start: ${tokenId}`)
-//         const response = await fetch(tokenUri)
-//         console.log(`FetchMetadata tokenId done: ${tokenId}`)
-//         if (response.ok) {
-//           // console.log(response)
-//           const res = await response.json()
-//           console.log(res)
-//           return res
-//         }
-//       }
-//     }
-//   }
-
-function NftItem(nft: Nft, index: Number) {
-
-    const [metadata, setMetadata] = useState({image: ""});
-    const {account, chainId} = useEthers()
-    const { value, error } = useCall({ contract, method: 'tokenURI', args: [nft.tokenId] }) ?? {}
-
-    const handlerFetchMetadata = async () => {
-      let tokenId = nft.tokenId;
-      console.log(`FetcTokenURI tokenId start: ${tokenId}`)
-      console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
-      if (error) {
-        console.error(error)
-      }
-      if (value) {
-        const tokenUri = value[0]
-        if (tokenUri && tokenUri.startsWith("http")) {
-          console.log(`FetchMetadata tokenId start: ${tokenId}`)
-          const response = await fetch(tokenUri)
-          console.log(`FetchMetadata tokenId done: ${tokenId}`)
-          if (response.ok) {
-            // console.log(response)
-            const res = await response.json()
-            console.log(res)
-            return res
-          }
+  const handlerFetchMetadata = async () => {
+    const value = result?.value;
+    const error = result?.error
+    let tokenId = nft.tokenId;
+    console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
+    if (error) {
+      console.error(error)
+    }
+    if (value) {
+      const tokenUri = value[0]
+      if (tokenUri && tokenUri.startsWith("http")) {
+        const response = await fetch(tokenUri)
+        if (response.ok) {
+          const res = await response.json()
+          return res
+        } else {
+          console.error(response)
         }
       }
     }
+  }
 
-    useEffect(() => {
-      console.log('useEffect '+ account)
-      handlerFetchMetadata().then((metadata: NftMetadata) => {
-          if (metadata) {
-                console.log(metadata)
-          // nft.metadata = metadata
-          setMetadata(metadata)
+  useEffect(() => {
+    if (result?.value) {
+      handlerFetchMetadata().then((data: NftMetadata) => {
+        if (data) {
+          console.log(data)
+          setImage(data.image);
+          // setImage('//ipfs.io/ipfs/QmQsT1c4ETrD3GcA6qMV5EiHbMvveVQ5Az2WzYPhJgqgeZ')
         }
-
       })
-    }, [account])
+    }
+  }, [result?.value])
 
   return (
     <Card key={nft.tokenId.toString()} className='nft-item'>
-      {/* {nft.tokenId} {nft.metadata? nft.metadata.name: ""} */}
       <Card.Title className='nft-header'>
         tokenId: {nft.tokenId}
       </Card.Title>
       <div className='img-wrapper'>
-        {metadata ? (
-          <Card.Img src={metadata.image} className='img'></Card.Img>
-          // <div> {nft.metadata.image}  </div>
+        {image ? (
+          <Card.Img src={image} className='img'></Card.Img>
         ) : (
           <Spinner animation="border" role="status" className='spinner'></Spinner>
         )}
@@ -152,18 +62,19 @@ function NftItem(nft: Nft, index: Number) {
   )
 }
 
-export default function MyNfts(props: {nfts: Nft[]}) {
+export default function MyNfts(props: { nfts: Nft[] }) {
+
+  const calls = props.nfts?.map(nft => ({ contract, method: 'tokenURI', args: [nft.tokenId] })) ?? []
+  const results = useCalls(calls) ?? []
+
   return (
     <div className='nft-collection'>
-      <p>
-        My nft collection
-      </p>
-      {console.log(`render nfts list`)}
+      <h4>My nft collection</h4>
+      {/* {console.log(`render nfts list`)} */}
       <div className='nft-list'>
         {
-          props.nfts.map((nft: Nft, index:Number) => {
-            console.log(`tokenId: ${nft.tokenId}`)
-            return NftItem(nft, index)
+          props.nfts.map((nft: Nft, index: number) => {
+            return NftItem(nft, results[index])
           })
         }
       </div>
