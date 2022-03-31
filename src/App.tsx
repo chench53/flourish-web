@@ -13,23 +13,23 @@ function App() {
 
   const {account} = useEthers();
 
-  var nfts: Nft[] = [
-    {
-      tokenId: 0,
-    },
-    {
-      tokenId: 1,
-    },
-    {
-      tokenId: 2,
-    },
-    {
-      tokenId: 3,
-    },
-    {
-      tokenId: 4,
-    }
-  ]
+  // var nfts: Nft[] = [
+  //   {
+  //     tokenId: 0,
+  //   },
+    // {
+    //   tokenId: 1,
+    // },
+    // {
+    //   tokenId: 2,
+    // },
+    // {
+    //   tokenId: 3,
+    // },
+    // {
+    //   tokenId: 4,
+    // }
+  // ]
 
   return (
     <ThemeProvider
@@ -41,7 +41,7 @@ function App() {
         <Container className='main'>
           <ImgGallery></ImgGallery>
           {
-            account ? (<MyNfts nfts={nfts}></MyNfts>) : ""
+            account ? (<MyNfts></MyNfts>) : ""
           }
           {/* <MyNfts nfts={nfts}></MyNfts> */}
         </Container>

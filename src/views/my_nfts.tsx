@@ -2,10 +2,10 @@ import { Card, Spinner } from 'react-bootstrap';
 
 import './my_nfts.css';
 
-import { Nft, NftMetadata, contract, fetchMetadata } from '../modules/eth';
+import { Nft, NftMetadata, contract, contractAddress, fetchMetadata } from '../modules/eth';
 import { useState, useEffect } from 'react';
 
-import { useCalls,  CallResult} from '@usedapp/core';
+import { useCall, useCalls,  CallResult, useEthers, useTokenBalance} from '@usedapp/core';
 
 
 function NftItem(nft: Nft, result: CallResult) {
@@ -40,21 +40,63 @@ function NftItem(nft: Nft, result: CallResult) {
   )
 }
 
-export default function MyNfts(props: { nfts: Nft[] }) {
+function NftsList(props: {balance: number, account: string|null|undefined}) {
+  const balance: number = props.balance;
+  const account: string|null|undefined = props.account;
 
-  const calls = props.nfts?.map(nft => ({ contract, method: 'tokenURI', args: [nft.tokenId] })) ?? []
+  function useGetTokenIds() {
+    const indexes = [...Array(balance).keys()]
+    console.log(indexes)
+    const calls = indexes.map(index => ({ contract, method: 'tokenOfOwnerByIndex', args: [account, index] })) ?? []
+    const results = useCalls(calls) ?? []
+    const values = results.map(result => result?.value?.[0].toNumber())
+    console.log(results)
+    return values
+  }
+
+  const tokenIds = useGetTokenIds();
+  console.log(tokenIds)
+  const filterdTokenIds = tokenIds.filter(x => {return x !== undefined})
+  const calls = filterdTokenIds.map(tokenId => ({ contract, method: 'tokenURI', args: [tokenId] })) ?? []
+  console.log(calls)
   const results = useCalls(calls) ?? []
+  console.log(results)
+  return (
+    <div>
+      {
+        filterdTokenIds.map((tokenId: number, index: number) => {
+          return NftItem({tokenId: tokenId}, results[index])
+        })
+      }
+    </div>
+  )
+}
+
+export default function MyNfts() {
+  const {account} = useEthers()
+
+  function useBalance() {
+    const { value, error } = useCall({contract, method: "balanceOf", args:[account]}) ?? {}
+    if (error) {
+      console.error(error)
+    }
+    if (value) {
+      const tokenCount = value[0].toNumber()
+      console.log(tokenCount)
+      return tokenCount
+    }
+    return 0;
+  }
+
+  const balance: number = useBalance()
 
   return (
     <div className='nft-collection'>
       <h4>My nft collection</h4>
-      {/* {console.log(`render nfts list`)} */}
       <div className='nft-list'>
-        {
-          props.nfts.map((nft: Nft, index: number) => {
-            return NftItem(nft, results[index])
-          })
-        }
+        {/* {console.log(account)} */}
+        {/* {(balance && account) ? <NftsList balance={balance} account={account}></NftsList> : ''} */}
+        {/* <NftsList balance={balance}></NftsList> */}
       </div>
     </div>
   )

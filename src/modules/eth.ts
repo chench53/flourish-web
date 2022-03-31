@@ -2,7 +2,8 @@ import { Contract } from '@ethersproject/contracts'
 import { CallResult } from '@usedapp/core';
 import ABI from './abi.json';
 
-const contractAddress = '0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f'
+// const contractAddress = '0xA129c36Fa5869862d934bf58d256bDBcBfB52A7f'
+export const contractAddress = '0xc32ee7316974D3230Ba7B22278C8c8dd75547798'
 
 export const contract = new Contract(contractAddress, ABI)
 
