@@ -41,7 +41,6 @@ const ImgGallery = () => {
     list: imgList
   }
 
-
   return (
     <div>
       <h4>choose an image to mint a nft</h4>

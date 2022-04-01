@@ -3,7 +3,6 @@ import Container from 'react-bootstrap/Container'
 
 import { Header } from './components/header';
 import {MyNfts, ImgGallery} from './views/index';
-import {Nft} from './modules/eth';
 import './App.css';
 
 import {useEthers } from '@usedapp/core'
@@ -12,24 +11,6 @@ import {useEthers } from '@usedapp/core'
 function App() {
 
   const {account} = useEthers();
-
-  // var nfts: Nft[] = [
-  //   {
-  //     tokenId: 0,
-  //   },
-    // {
-    //   tokenId: 1,
-    // },
-    // {
-    //   tokenId: 2,
-    // },
-    // {
-    //   tokenId: 3,
-    // },
-    // {
-    //   tokenId: 4,
-    // }
-  // ]
 
   return (
     <ThemeProvider
@@ -42,8 +23,8 @@ function App() {
           <ImgGallery></ImgGallery>
           {
             account ? (<MyNfts></MyNfts>) : ""
+            // account ? MyNfts() : ""
           }
-          {/* <MyNfts nfts={nfts}></MyNfts> */}
         </Container>
       </div>
     </ThemeProvider>

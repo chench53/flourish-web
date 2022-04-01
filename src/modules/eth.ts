@@ -21,10 +21,10 @@ export type Image = {
   readonly name: string,
 }
 
-export const fetchMetadata = async (nft: Nft, result: CallResult) => {
+export const fetchMetadata = async (tokenId: number, result: CallResult) => {
   const value = result?.value;
   const error = result?.error
-  let tokenId = nft.tokenId;
+  // let tokenId = nft.tokenId;
   console.log(`FetcTokenURI tokenId done: ${tokenId}  ${value}`)
   if (error) {
     console.error(error)
