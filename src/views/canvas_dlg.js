@@ -37,7 +37,8 @@ export function CanvasDlg(props) {
     var fabric_canvas = new fabric.Canvas('c', {
       height: 488,
       width: 488,
-      backgroundImage: metadata?.image
+      // backgroundImage: metadata?.image
+      backgroundImage: '/assets/lamp-c.jpg'
     })
 
     fabric_canvas.isDrawingMode = true;
@@ -46,12 +47,23 @@ export function CanvasDlg(props) {
   }
 
   const hanlerClear = () => {
-    setCanvas(initCanvas())
+    canvas.clear();
+    // canvas._clearCache();
+    // canvas.clearContext();
+    // setCanvas(initCanvas());
   }
 
   const handleSubmit = async () => {
     // setLoading(true)
-    
+    // window.open(canvas.toDataURL('image/jpeg'));
+    var canvasElement = document.getElementById('c');
+    console.log(canvasElement)
+    // var img = new Image();
+    // img.setAttribute('crossOrigin', 'anonymous');
+
+    var dataURL = canvasElement.toDataURL('image/png')
+    window.open(dataURL)
+    console.log(dataURL)
   }
 
   return (
