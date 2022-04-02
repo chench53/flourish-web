@@ -87,6 +87,7 @@ function NftsList(props: {
   // console.log(results)
   return (
     <div className='nft-list'>
+      {console.log("render MyNfts list")}
       {
         filterdTokenIds.map((tokenId: number, index: number) => {
           return <NftItem key={tokenId.toString()} tokenId={tokenId} result={results[index]}></NftItem>
@@ -117,7 +118,7 @@ export default function MyNfts() {
 
   return (
     <div className='nft-collection'>
-      {console.log("render MyNfts")}
+      {/* {console.log("render MyNfts")} */}
       <h4>My nft collection</h4>
       <div className='nft-list'>
         {(balance && account) ? (

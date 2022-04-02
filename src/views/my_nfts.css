@@ -38,6 +38,10 @@
     margin-top: 80px;
 }
 
+.canvas-dlg {
+    width: 600px;
+}
+
 .img-canvas {
     width: 400px;
     border: 1px solid #eee;
