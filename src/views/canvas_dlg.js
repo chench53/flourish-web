@@ -2,9 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
-// import { Nft, NftMetadata } from '../modules/eth';
-// import { NftCanvas } from './canvas';
+import {
+  useEthers,
+  useContractFunction,
+} from '@usedapp/core'
 import { fabric } from 'fabric';
+import { create } from 'ipfs-http-client'
+import { IPFS_GATEWAY } from '../modules/const';
+import {contract} from '../modules/eth';
 
 import './my_nfts.css';
 
@@ -25,10 +30,13 @@ export function CanvasDlg(props) {
   let obj = {}
   const [canvas, setCanvas] = useState(obj)
   const [loading, setLoading] = useState(false)
+  // const {account} = useEthers()
+  const { state, send } = useContractFunction(contract, 'setTokenURI', {}) 
+
+  const client = create(window.location.href + 'ipfs-api/api/v0')
 
   useEffect(() => {
     if (show) {
-      // console.log('set canvas')
       setCanvas(initCanvas());
     }
   }, [show]);
@@ -37,8 +45,7 @@ export function CanvasDlg(props) {
     var fabric_canvas = new fabric.Canvas('c', {
       height: 488,
       width: 488,
-      // backgroundImage: metadata?.image
-      backgroundImage: '/assets/lamp-c.jpg'
+      backgroundImage: _redirtImageUrl(metadata?.image)
     })
 
     fabric_canvas.isDrawingMode = true;
@@ -46,24 +53,48 @@ export function CanvasDlg(props) {
     return fabric_canvas
   }
 
+  const _redirtImageUrl = (url) => { // fix security error of exporting canvas data
+    const newUrl = url.replace(IPFS_GATEWAY, '/ipfs-gateway')
+    // console.log(newUrl)
+    return newUrl
+  }
+
   const hanlerClear = () => {
     canvas.clear();
-    // canvas._clearCache();
-    // canvas.clearContext();
-    // setCanvas(initCanvas());
+    canvas.setBackgroundImage(metadata?.image, () => {
+      // console.log('setBackgroundImage')
+      canvas.renderAndReset() // re=render
+    })
   }
 
   const handleSubmit = async () => {
-    // setLoading(true)
-    // window.open(canvas.toDataURL('image/jpeg'));
     var canvasElement = document.getElementById('c');
-    console.log(canvasElement)
-    // var img = new Image();
-    // img.setAttribute('crossOrigin', 'anonymous');
+    var dataURL = canvasElement.toDataURL('image/jpeg')
+    setLoading(true)
+    const updatedTokenUri = await updateNft(dataURL)
+    await setTokenURI(updatedTokenUri)
+    setLoading(false)
+    handleClose()
+  }
 
-    var dataURL = canvasElement.toDataURL('image/png')
-    window.open(dataURL)
-    console.log(dataURL)
+  const updateNft = async (imageDataUrl) => {
+    let res = await fetch(imageDataUrl);
+    let blob = await res.blob()
+    var file = new File([blob], "filename");
+    var { cid } = await client.add(file)
+    const imageUrl = `${IPFS_GATEWAY}/ipfs/${cid.toString()}`
+
+    var updatedMetadata = Object.assign({}, metadata)
+    updatedMetadata.image = imageUrl
+    var { cid } = await client.add(JSON.stringify(updatedMetadata))
+    var updatedTokenUri = `${IPFS_GATEWAY}/ipfs/${cid.toString()}`
+    console.log(updatedTokenUri)
+    return updatedTokenUri
+  }
+
+  const setTokenURI = async (tokenURI) => {
+    var tokenUri = tokenURI
+    await send(tokenId, tokenUri)
   }
 
   return (
@@ -80,23 +111,22 @@ export function CanvasDlg(props) {
             <canvas id="c" className='img-canvas' />
           </Modal.Body>
 
-            {loading ? (
-              <Modal.Footer>
-                <Spinner animation="border" role="status" className='spinner'></Spinner>
-              </Modal.Footer>
-            ) : (
-              <Modal.Footer>
-                <Button variant="secondary" onClick={hanlerClear}>
-                  clear
-                </Button>
-                <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-                  submit
-                </Button>
-              </Modal.Footer>
-            )}
+          {loading ? (
+            <Modal.Footer>
+              <Spinner animation="border" role="status" className='spinner'></Spinner>
+            </Modal.Footer>
+          ) : (
+            <Modal.Footer>
+              <Button variant="secondary" onClick={hanlerClear}>
+                clear
+              </Button>
+              <Button variant="primary" onClick={handleSubmit} disabled={loading}>
+                submit
+              </Button>
+            </Modal.Footer>
+          )}
         </div>
       )}
-
     </Modal>
   )
 }

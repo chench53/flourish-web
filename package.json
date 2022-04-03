@@ -15,6 +15,8 @@
     "crypto-browserify": "^3.12.0",
     "fabric": "^4.6.0",
     "fabricjs-react": "^1.0.8",
+    "http-proxy-middleware": "^2.0.4",
+    "ipfs-http-client": "^56.0.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.2.1",
     "react-dom": "^17.0.2",

@@ -27,7 +27,9 @@ function NftItem(props: { tokenId: number, result: CallResult }) {
             tokenId: tokenId,
             metadata: {
               name: data.name,
-              image: data.image
+              image: data.image,
+              description: data.description,
+              attributes: data.attributes
             }
           })
           // setImage('//ipfs.io/ipfs/QmQsT1c4ETrD3GcA6qMV5EiHbMvveVQ5Az2WzYPhJgqgeZ')
@@ -75,6 +77,7 @@ function NftsList(props: {
     const results = useCalls(calls) ?? []
     const values = results.map(result => result?.value?.[0].toNumber())
     // console.log(results)
+    // const values = [2]
     return values
   }
 
@@ -101,7 +104,8 @@ export default function MyNfts() {
 
   const [showDlg, setShowDlg] = useState(false);
 
-  const { account } = useEthers()
+  // const { account } = useEthers()
+const account = '0x2cbE6AEfC4D226C4913659Dd948C7eDb07410D80'
   function useBalance() {
     const { value, error } = useCall({ contract, method: "balanceOf", args: [account] }) ?? {}
 

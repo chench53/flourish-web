@@ -9,7 +9,9 @@ export const contract = new Contract(contractAddress, ABI)
 
 export interface NftMetadata {
   name: string,
-  image: string
+  image: string,
+  description?: string
+  attributes?: any[]
 }
 
 export type Nft = {
