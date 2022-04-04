@@ -9,7 +9,7 @@ import {
 import { fabric } from 'fabric';
 import { create } from 'ipfs-http-client'
 import { IPFS_GATEWAY } from '../modules/const';
-import {contract} from '../modules/eth';
+import {contractAddress, contract} from '../modules/eth';
 
 import './my_nfts.css';
 
@@ -43,8 +43,8 @@ export function CanvasDlg(props) {
 
   const initCanvas = () => {
     var fabric_canvas = new fabric.Canvas('c', {
-      height: 488,
-      width: 488,
+      height: 500,
+      width: 499,
       backgroundImage: _redirtImageUrl(metadata?.image)
     })
 
@@ -69,9 +69,12 @@ export function CanvasDlg(props) {
 
   const handleSubmit = async () => {
     var canvasElement = document.getElementById('c');
-    var dataURL = canvasElement.toDataURL('image/jpeg')
+    var dataURL = canvasElement.toDataURL('image/png')
     setLoading(true)
     const updatedTokenUri = await updateNft(dataURL)
+    // setTokenURI(updatedTokenUri).then(() => {
+    //   console.log('tx confirmed')
+    // })
     await setTokenURI(updatedTokenUri)
     setLoading(false)
     handleClose()
@@ -101,7 +104,12 @@ export function CanvasDlg(props) {
     <Modal show={show} onHide={handleClose} className="canvas-dlg" size='lg'>
       <Modal.Header closeButton>
         <Modal.Title>
-          {`id: ${tokenId}`}
+          {`id: ${tokenId}`} &nbsp;
+          <Button variant="link" te size="sm" onClick={() => {
+            window.open(`https://testnets.opensea.io/assets/${contractAddress}/${tokenId}`)}
+          }>
+            opensea
+          </Button>
         </Modal.Title>
       </Modal.Header>
 

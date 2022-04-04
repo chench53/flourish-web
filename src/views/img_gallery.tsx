@@ -4,9 +4,10 @@ import {
   useContractFunction,
 } from '@usedapp/core'
 
-import {IPFS_GATEWAY} from '../modules/const';
-import {contract} from '../modules/eth';
+import { IPFS_GATEWAY } from '../modules/const';
+import { contract } from '../modules/eth';
 import imgList from './img_list.json';
+import { cheemAImage, cheemBImage, cheemCImage } from '../assets/index';
 
 import './img_gallery.css';
 
@@ -21,7 +22,6 @@ const ImgOri = (name: string, src: string) => {
   const Mint = (name: string) => {
     var tokenUri = `${IPFS_GATEWAY}/ipfs/${imageMapping[name].metadata_hash}?filename=${name}.json`
     send(tokenUri)
-    // send('http://ipfs.frontiech.com/ipfs/QmW6hNdJEgRNNQZ3mbLaxiYbRHYoE9KN9vqUHJJ5wDdnFM?filename=lamp-c.json')
   }
 
   return (
@@ -40,6 +40,11 @@ const ImgGallery = () => {
     meta: null,
     list: imgList
   }
+  const imgMapping = {
+    'cheem-a': cheemAImage,
+    'cheem-b': cheemBImage,
+    'cheem-c': cheemCImage,
+  }
 
   return (
     <div>
@@ -47,7 +52,7 @@ const ImgGallery = () => {
       <div className="img-list">
         {
           imgs.list.map((img) => {
-            return ImgOri(img.name, process.env.PUBLIC_URL + `/assets/${img.name}.jpg`)
+            return ImgOri(img.name, imgMapping[img.name])
           })
         }
       </div>     

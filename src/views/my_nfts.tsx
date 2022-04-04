@@ -76,18 +76,13 @@ function NftsList(props: {
     const calls = indexes.map(index => ({ contract, method: 'tokenOfOwnerByIndex', args: [account, index] })) ?? []
     const results = useCalls(calls) ?? []
     const values = results.map(result => result?.value?.[0].toNumber())
-    // console.log(results)
-    // const values = [2]
     return values
   }
 
   const tokenIds = useGetTokenIds();
-  // console.log(tokenIds)
   const filterdTokenIds = tokenIds.filter(x => { return x !== undefined })
   const calls = filterdTokenIds.map(tokenId => ({ contract, method: 'tokenURI', args: [tokenId] })) ?? []
-  // console.log(calls)
   const results = useCalls(calls) ?? []
-  // console.log(results)
   return (
     <div className='nft-list'>
       {console.log("render MyNfts list")}
@@ -104,8 +99,8 @@ export default function MyNfts() {
 
   const [showDlg, setShowDlg] = useState(false);
 
-  // const { account } = useEthers()
-const account = '0x2cbE6AEfC4D226C4913659Dd948C7eDb07410D80'
+  const { account } = useEthers()
+
   function useBalance() {
     const { value, error } = useCall({ contract, method: "balanceOf", args: [account] }) ?? {}
 
