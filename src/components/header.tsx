@@ -1,9 +1,10 @@
-import './header.css'
-
 import { Navbar, Button, DropdownButton, Dropdown, Container } from 'react-bootstrap';
 import {
   useEthers,
 } from '@usedapp/core'
+
+import './header.css'
+
 
 export const Header = () => {
   const { activateBrowserWallet, account, deactivate } = useEthers()

@@ -48,7 +48,7 @@ const ImgGallery = () => {
 
   return (
     <div>
-      <h4>choose an image to mint a nft</h4>
+      <h4>choose an image to mint Nft</h4>
       <div className="img-list">
         {
           imgs.list.map((img) => {
