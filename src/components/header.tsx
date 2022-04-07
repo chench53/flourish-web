@@ -2,6 +2,7 @@ import { Navbar, Button, DropdownButton, Dropdown, Container } from 'react-boots
 import {
   useEthers,
 } from '@usedapp/core'
+import { logo } from '../assets/index';
 
 import './header.css'
 
@@ -11,11 +12,11 @@ export const Header = () => {
   return (
     <Navbar bg="light" variant="light">
       <Container fluid={true}>
-        <Navbar.Brand href="#" className="logo">
-          {/* <img src={process.env.PUBLIC_URL + '/logo.png'}></img> */}
+        <img src={logo} className='logo-img'></img>
+        <Navbar.Brand href="/" className="logo-text">
           Flourish
         </Navbar.Brand>
-        demo 
+        &nbsp;&nbsp; demo 
         {/* <Navbar.Toggle /> */}
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>

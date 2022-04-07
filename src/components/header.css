@@ -5,8 +5,16 @@
     src: url('https://dl.fontget.com/f/e/feeling-lovely/woff_src/Feeling Lovely.woff?token=TS2KUJK-RjpwPZQ8yyc4Sw&expires=1648299026') format('woff');
 }
 
-.logo {
-    font-family: 'font-15070';
+.logo-img {
+    width: 4em;
+    border: 1px solid #a4a4a4;
+    border-radius: 50%;
+    box-shadow: 2px 2px 1px #a4a4a4;
+}
+
+.logo-text {
+    /* font-family: 'font-15070'; */
     font-weight: 600;
     font-size: x-large!important ;
+    margin-left: 8px;
 }

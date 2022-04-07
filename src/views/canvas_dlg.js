@@ -121,15 +121,28 @@ export function CanvasDlg(props) {
 
           {loading ? (
             <Modal.Footer>
-              <Spinner animation="border" role="status" className='spinner'></Spinner>
+              <Spinner animation="border" role="status" className='spinner'>
+              <span className="visually-hidden">Loading...</span>
+              </Spinner>
             </Modal.Footer>
           ) : (
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanlerClear}>
+              <Button variant="secondary" onClick={hanlerClear} disabled={loading}>
                 clear
               </Button>
               <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-                submit
+                {/* {loading && (
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  /> 
+                )
+                }
+                 {loading ? 'waiting':'submit'}  */}
+                 submit
               </Button>
             </Modal.Footer>
           )}
