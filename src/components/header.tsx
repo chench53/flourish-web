@@ -24,7 +24,7 @@ export const Header = () => {
               <DropdownButton title={`${account.slice(0, 5)}...${account.slice(38)}`} variant='outline-primary' align={{ lg: 'end' }}>
                 <Dropdown.Item eventKey="1" onClick={deactivate}>logout</Dropdown.Item>
               </DropdownButton>
-            ) : <Button onClick={activateBrowserWallet} > connect wallect </Button>
+            ) : <Button onClick={activateBrowserWallet} > connect wallet </Button>
             }
           </Navbar.Text>
         </Navbar.Collapse>

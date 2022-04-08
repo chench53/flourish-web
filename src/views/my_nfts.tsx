@@ -63,8 +63,8 @@ function NftItem(props: { tokenId: number, result: CallResult }) {
   )
 }
 
-function NftsList(props: { 
-  balance: number, 
+function NftsList(props: {
+  balance: number,
   account: string | null | undefined,
   handlerShowDlg: Function,
 }) {
@@ -121,8 +121,8 @@ export default function MyNfts() {
       <h4>My nft collection</h4>
       <div className='nft-list'>
         {(balance && account) ? (
-          <NftsList balance={balance} account={account} handlerShowDlg={setShowDlg}></NftsList> 
-        ): ''}
+          <NftsList balance={balance} account={account} handlerShowDlg={setShowDlg}></NftsList>
+        ) : ''}
       </div>
       {/* <CanvasDlg></CanvasDlg> */}
     </div>

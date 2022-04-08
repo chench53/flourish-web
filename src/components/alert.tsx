@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Alert } from "react-bootstrap";
 
 export interface AlertInfo {
@@ -10,9 +9,6 @@ export interface AlertInfo {
 }
 
 export function MyAlert(props: AlertInfo) {
-
-  // const [show, setShow] = useState(true);
-
   if (props.show) {
     return (
       <Alert variant={props.variant} onClose={props.closeAlert} dismissible>

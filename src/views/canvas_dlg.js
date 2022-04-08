@@ -3,13 +3,12 @@
 import { useState, useEffect } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import {
-  useEthers,
   useContractFunction,
 } from '@usedapp/core'
 import { fabric } from 'fabric';
 import { create } from 'ipfs-http-client'
 import { IPFS_GATEWAY } from '../modules/const';
-import {contractAddress, contract} from '../modules/eth';
+import { contractAddress, contract } from '../modules/eth';
 
 import './my_nfts.css';
 
@@ -31,7 +30,7 @@ export function CanvasDlg(props) {
   const [canvas, setCanvas] = useState(obj)
   const [loading, setLoading] = useState(false)
   // const {account} = useEthers()
-  const { state, send } = useContractFunction(contract, 'setTokenURI', {}) 
+  const { state, send } = useContractFunction(contract, 'setTokenURI', {})
 
   const client = create(window.location.href + 'ipfs-api/api/v0')
 
@@ -62,8 +61,7 @@ export function CanvasDlg(props) {
   const hanlerClear = () => {
     canvas.clear();
     canvas.setBackgroundImage(metadata?.image, () => {
-      // console.log('setBackgroundImage')
-      canvas.renderAndReset() // re=render
+      canvas.renderAndReset() // re-render
     })
   }
 
@@ -72,9 +70,6 @@ export function CanvasDlg(props) {
     var dataURL = canvasElement.toDataURL('image/png')
     setLoading(true)
     const updatedTokenUri = await updateNft(dataURL)
-    // setTokenURI(updatedTokenUri).then(() => {
-    //   console.log('tx confirmed')
-    // })
     await setTokenURI(updatedTokenUri)
     setLoading(false)
     handleClose()
@@ -106,7 +101,8 @@ export function CanvasDlg(props) {
         <Modal.Title>
           {`id: ${tokenId}`} &nbsp;
           <Button variant="link" te size="sm" onClick={() => {
-            window.open(`https://testnets.opensea.io/assets/${contractAddress}/${tokenId}`)}
+            window.open(`https://testnets.opensea.io/assets/${contractAddress}/${tokenId}`)
+          }
           }>
             opensea
           </Button>
@@ -121,8 +117,9 @@ export function CanvasDlg(props) {
 
           {loading ? (
             <Modal.Footer>
+              waiting for transcaion confirmed... 
               <Spinner animation="border" role="status" className='spinner'>
-              <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Loading...</span>
               </Spinner>
             </Modal.Footer>
           ) : (
@@ -142,7 +139,7 @@ export function CanvasDlg(props) {
                 )
                 }
                  {loading ? 'waiting':'submit'}  */}
-                 submit
+                submit
               </Button>
             </Modal.Footer>
           )}
